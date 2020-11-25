@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = 'wprbot.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'wprbot (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -66,7 +66,8 @@ ITEM_PIPELINES = {
    'wprbot.pipelines.WprbotPipeline': 300,
 }
 
-DUPEFILTER_CLASS = 'wprbot.dupefilters.WprbotDupeFilter'
+# DUPEFILTER_CLASS = 'wprbot.dupefilters.WprbotDupeFilter'
+# RETRY_TIMES = 5
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -75,7 +76,7 @@ AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 AUTOTHROTTLE_START_DELAY = 1
 # The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 3
+AUTOTHROTTLE_MAX_DELAY = 5
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 AUTOTHROTTLE_TARGET_CONCURRENCY = 4.0

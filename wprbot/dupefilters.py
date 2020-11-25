@@ -17,6 +17,7 @@ class WprbotDupeFilter(RFPDupeFilter):
     def request_seen(self, request):
         fp = self.__getid(request.url)
         if fp in self.fingerprints:
+            print('-------dup', )
             return True
         self.fingerprints.add(fp)
         if self.file:
