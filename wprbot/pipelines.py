@@ -2,11 +2,15 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+import os, re
+from urllib.parse import urlparse
 
 import requests
+import scrapy
 
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
+from scrapy.pipelines.images import ImagesPipeline
 
 
 class WprbotPipeline:
@@ -37,3 +41,11 @@ class WprbotPipeline:
         requests.post(f'https://{spider.base_domain}/wp-json/custom-api/v1/create-entity',
                       json=data, headers=headers)
         return item
+
+
+class WprbotImagesPipeline(ImagesPipeline):
+
+    def file_path(self, request, response=None, info=None, *, item=None):
+        url = re.split('/web/[0-9A-Za-z_\-]+/', request.url)[-1]
+        print('======', url, '===>', 'uploads' + urlparse(url).path)
+        return 'uploads/' + urlparse(url).path

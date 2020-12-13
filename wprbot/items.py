@@ -13,3 +13,5 @@ class WprbotItem(scrapy.Item):
     meta_keywords = scrapy.Field()
     meta_desc = scrapy.Field()
     content = scrapy.Field()
+    image_urls = scrapy.Field()
+    images = scrapy.Field()

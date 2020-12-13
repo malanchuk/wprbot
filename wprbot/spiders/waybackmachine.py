@@ -1,9 +1,15 @@
 import re
-import scrapy
+
+from twisted.web._newclient import ResponseNeverReceived
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
 from wprbot.items import WprbotItem
+
+
+RetryMiddleware.EXCEPTIONS_TO_RETRY += (ResponseNeverReceived,)
 
 
 class WaybackSpider(CrawlSpider):
@@ -49,8 +55,8 @@ class WaybackSpider(CrawlSpider):
         src = re.sub('url=\".+%s/' % domain_re,
                      'url="https://www.%s/wp-content/uploads/' % self.base_domain, src)
 
-        # case of amazon storage
-        domain_re = 's3\.amazonaws\.com'
+        # case of cloud storage
+        domain_re = 'cloudfront\.net|amazonaws\.com|thesn\.net'
         src = re.sub('src=\".+%s/' % domain_re,
                      'src="https://www.%s/wp-content/uploads/' % self.base_domain, src)
         src = re.sub('background=\".+%s/' % domain_re,
@@ -59,5 +65,6 @@ class WaybackSpider(CrawlSpider):
                      'url="https://www.%s/wp-content/uploads/' % self.base_domain, src)
 
         item['content'] = src
+        item['image_urls'] = response.xpath('//img/@src').getall()[4:]
 
         return item
