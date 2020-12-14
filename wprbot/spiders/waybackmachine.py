@@ -40,11 +40,12 @@ class WaybackSpider(CrawlSpider):
         item['meta_desc'] = response.xpath('//meta[@name="description"]/@content').get()
 
         src = " ".join(response.xpath(self.content_xpath).getall())
-        src = re.sub('<script[^>]+>.*?</script>', '', src, flags=re.DOTALL)
+        src = re.sub('<script[^>]*>.*?</script>', '', src, flags=re.DOTALL)
         src = re.sub('https://web.archive.org', '', src)
         src = re.sub('http://web.archive.org', '', src)
         src = re.sub('/web/[0-9A-Za-z_\-]+/http', 'https', src)
         src = re.sub('web/[0-9A-Za-z_\-]+/http', 'https', src)
+        src = re.sub('httpss:', 'https:', src)
 
         domain_re = self.base_domain.replace('.', '\.')
 
@@ -57,11 +58,11 @@ class WaybackSpider(CrawlSpider):
 
         # case of cloud storage
         domain_re = 'cloudfront\.net|amazonaws\.com|thesn\.net'
-        src = re.sub('src=\".+%s/' % domain_re,
+        src = re.sub('src=\".+(%s)/' % domain_re,
                      'src="https://www.%s/wp-content/uploads/' % self.base_domain, src)
-        src = re.sub('background=\".+%s/' % domain_re,
+        src = re.sub('background=\".+(%s)/' % domain_re,
                      'background="https://www.%s/wp-content/uploads/' % self.base_domain, src)
-        src = re.sub('url=\".+%s/' % domain_re,
+        src = re.sub('url=\".+(%s)/' % domain_re,
                      'url="https://www.%s/wp-content/uploads/' % self.base_domain, src)
 
         item['content'] = src
