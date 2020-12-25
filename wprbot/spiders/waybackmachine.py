@@ -66,6 +66,11 @@ class WaybackSpider(CrawlSpider):
                      'url="https://www.%s/wp-content/uploads/' % self.base_domain, src)
 
         item['content'] = src
-        item['image_urls'] = response.xpath('//img/@src').getall()[4:]
+        image_urls = []
+        for url in response.xpath('//img/@src').getall()[4:]:
+            if not url.startswith('http'):
+                url = 'https:' + url
+            image_urls.append(url)
+        item['image_urls'] = image_urls
 
         return item
