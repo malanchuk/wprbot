@@ -38,8 +38,9 @@ class WprbotPipeline:
             }
         }
         headers = {'Content-Type': 'application/json'}
-        requests.post(f'https://{spider.base_domain}/wp-json/custom-api/v1/create-entity',
-                      json=data, headers=headers)
+        resp = requests.post(f'https://{spider.base_domain}/wp-json/custom-api/v1/create-entity',
+                             json=data, headers=headers)
+        # print(resp.json())
         return item
 
 
